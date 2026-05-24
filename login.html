@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>登录 | GSKChem</title>
+    <!-- Google Font & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e9f5ec 0%, #d4e6da 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        /* 背景装饰 */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 10% 20%, rgba(43, 110, 60, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 480px;
+            z-index: 2;
+        }
+
+        /* 卡片主视觉 */
+        .auth-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(0px);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .auth-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 30px 50px -15px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-header {
+            background: linear-gradient(115deg, #1e4620, #2d6a4f);
+            padding: 1.8rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .auth-header h1 {
+            font-weight: 700;
+            font-size: 1.9rem;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .auth-header p {
+            opacity: 0.85;
+            font-size: 0.9rem;
+        }
+
+        .auth-body {
+            padding: 2rem 2rem 2.2rem;
+        }
+
+        /* 表单样式 */
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid #e2edf2;
+            border-radius: 1.2rem;
+            padding: 0.7rem 1rem;
+            margin-bottom: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .input-group i {
+            color: #6c8b6f;
+            font-size: 1.1rem;
+            width: 1.6rem;
+            transition: color 0.2s;
+        }
+
+        .input-group input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            font-weight: 500;
+            color: #1f2e2a;
+        }
+
+        .input-group input::placeholder {
+            color: #98ae9b;
+            font-weight: 400;
+        }
+
+        .input-group:focus-within {
+            border-color: #2b6e3c;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(43, 110, 60, 0.15);
+        }
+
+        .input-group:focus-within i {
+            color: #2b6e3c;
+        }
+
+        /* 额外选项 */
+        .auth-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.8rem 0 1.8rem;
+            font-size: 0.8rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #3f5a43;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            accent-color: #2b6e3c;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
+
+        .forgot-link {
+            color: #2b6e3c;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+            color: #1a4a2a;
+        }
+
+        /* 按钮 */
+        .auth-btn {
+            background: linear-gradient(95deg, #2b6e3c, #1f5430);
+            border: none;
+            width: 100%;
+            padding: 0.85rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-btn:hover {
+            background: linear-gradient(95deg, #1f5430, #154623);
+            transform: scale(0.98);
+            box-shadow: 0 4px 8px -4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 注册引导链接 */
+        .auth-footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #4c6a4f;
+            border-top: 1px solid #e6f0e8;
+            padding-top: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .auth-footer a {
+            color: #1f5430;
+            font-weight: 700;
+            text-decoration: none;
+            margin-left: 0.3rem;
+            transition: 0.2s;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+            color: #0a3a1a;
+        }
+
+        .demo-note {
+            background: #f1f9ef;
+            border-radius: 1rem;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #2b6e3c;
+            margin-top: 1rem;
+        }
+
+        /* 返回首页链接 */
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,240,0.8);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: #1f5430;
+            text-decoration: none;
+            transition: 0.2s;
+            width: fit-content;
+        }
+
+        .back-home i {
+            font-size: 0.8rem;
+        }
+
+        .back-home:hover {
+            background: white;
+            color: #0e3b1c;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 500px) {
+            .auth-body {
+                padding: 1.6rem;
+            }
+            .auth-header h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>
+                <i class="fas fa-flask"></i> 
+                化学研习社
+            </h1>
+            <p>登录 · 开启化学研学之旅</p>
+        </div>
+        <div class="auth-body">
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="loginEmail" placeholder="电子邮箱" required autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder="密码" required autocomplete="current-password">
+                </div>
+                <div class="auth-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked> 记住我
+                    </label>
+                    <a href="#" class="forgot-link" id="forgotPwdLink">忘记密码？</a>
+                </div>
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-arrow-right-to-bracket"></i> 登录账户
+                </button>
+                <div class="demo-note">
+                    <i class="fas fa-laptop-code"></i> 演示模式：任意邮箱+任意密码点击登录即可体验
+                </div>
+            </form>
+            <div class="auth-footer">
+                还没有账号？
+                <a href="register.html" id="toRegisterLink">立即注册 <i class="fas fa-chevron-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <a href="index.html" class="back-home"><i class="fas fa-home"></i> 返回首页</a>
+    </div>
+</div>
+
+<script>
+    // 登录模拟处理（美观大气且友好）
+    const loginForm = document.getElementById('loginForm');
+    const forgotLink = document.getElementById('forgotPwdLink');
+    
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const pwd = document.getElementById('loginPassword').value.trim();
+            if (!email || !pwd) {
+                alert('✨ 请填写邮箱和密码（演示模式任意内容即可登录）');
+                return;
+            }
+            // 演示轻提示
+            alert(`🎉 登录成功！\n欢迎回来，${email}\n（当前为演示模式，后续将接入真实认证）`);
+            // 可跳转回主页或保持当前
+            window.location.href = 'index.html';
+        });
+    }
+    
+    if (forgotLink) {
+        forgotLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('📧 重置密码功能开发中，请联系管理员或通过邮箱找回。演示模式下可任意登录~');
+        });
+    }
+</script>
+</body>
+</html>
